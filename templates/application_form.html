@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Apply for {{ benefit.name }}</h1>
+<form method="POST" action="{{ url_for('applications.apply', benefit_id=benefit.id) }}">
+    {{ form.csrf_token }}
+    <!-- Add form fields for application -->
+    {{ form.submit }}
+</form>
+{% endblock %}

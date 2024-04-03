@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Welfare Benefits</h1>
+<ul>
+    {% for benefit in benefits %}
+    <li>
+        <h2>{{ benefit.name }}</h2>
+        <p>{{ benefit.description }}</p>
+        <p>Requirements: {{ benefit.requirements }}</p>
+        <a href="{{ url_for('applications.apply', benefit_id=benefit.id) }}">Apply</a>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

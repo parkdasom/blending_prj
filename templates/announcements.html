@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Announcements</h1>
+<ul>
+    {% for announcement in announcements %}
+    <li>
+        <h2>{{ announcement.title }}</h2>
+        <p>{{ announcement.content }}</p>
+        <p>Posted on: {{ announcement.posted_date }}</p>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

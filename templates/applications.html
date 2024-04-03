@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>My Applications</h1>
+<ul>
+    {% for application in applications %}
+    <li>
+        <h2>{{ application.benefit.name }}</h2>
+        <p>Applied on: {{ application.applied_date }}</p>
+        <p>Status: {{ application.status }}</p>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}
