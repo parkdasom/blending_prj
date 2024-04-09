@@ -10,13 +10,19 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         print("Searching for user with email:", form.email.data)
-        user = User.query.filter_by(email=form.email.data).first()
+        
+        """
+        user = User.query.filter(email=form.email.data).first()
+        """
+                
+        user = User.query.filter(User.email == form.email.data).first()
         print("Found user:", user)
+    
         if user and user.password == form.password.data:
             flash('Login successful!', 'success')
             return redirect(url_for('index'))
         else:
-            flash('Invalid email or password', 'danger')  # 올바르지 않은 이메일 또는 비밀번호 입력시 메시지 출력
+            flash('Invalid email or password', 'danger')
     return render_template('auth/login.html', form=form)
 
 @auth_bp.route('/signup', methods=['GET', 'POST'])
