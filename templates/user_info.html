@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>마이페이지</h1>
+<form method="POST" action="{{ url_for('applications.user_info') }}">
+    {{ form.csrf_token }}
+    <p> 소득 정보 : {{ form.income }} </p>
+    <p> 가족 인원 :  {{ form.family_members }} </p>
+    <input type="submit" value="정보 저장하기">
+</form>
+{% endblock %}

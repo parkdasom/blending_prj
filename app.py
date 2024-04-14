@@ -2,7 +2,7 @@ from flask import Flask, render_template, flash, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_socketio import SocketIO
 from flask_login import LoginManager
-from models import db
+from models import db, User #240414 추가
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'

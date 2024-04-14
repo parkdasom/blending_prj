@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-
 {% block content %}
 <h1>My Applications</h1>
 <ul>
@@ -8,6 +7,11 @@
         <h2>{{ application.benefit.name }}</h2>
         <p>Applied on: {{ application.applied_date }}</p>
         <p>Status: {{ application.status }}</p>
+        {% if application.user.user_info %}
+        <p>Email: {{ application.user.email }}</p>
+        <p>Income: {{ application.user.user_info.income }}</p>
+        <p>Family Members: {{ application.user.user_info.family_members }}</p>
+        {% endif %}
     </li>
     {% endfor %}
 </ul>

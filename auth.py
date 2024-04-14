@@ -19,6 +19,7 @@ def login():
         print("Found user:", user)
     
         if user and user.password == form.password.data:
+            login_user(user) #240414 추가
             flash('Login successful!', 'success')
             return redirect(url_for('index'))
         else:

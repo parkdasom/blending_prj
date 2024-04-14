@@ -8,14 +8,35 @@ class ModelMixin(object):
     def save(self):
         db.session.add(self)
         db.session.commit()
-
+"""
 class User(UserMixin, ModelMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), nullable=False, unique=True)
     email = db.Column(db.String(120), nullable=False, unique=True)
     password = db.Column(db.String(100), nullable=False)
     applications = db.relationship('Application', backref='user', lazy='dynamic')
+"""
 
+class User(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(64), unique=True)
+    email = db.Column(db.String(120), unique=True)
+    password = db.Column(db.String(100))
+    applications = db.relationship('Application', backref='user', lazy='dynamic')
+    user_info = db.relationship('UserInfo', uselist=False, backref='user')
+
+    # Flask-Login 요구 속성 추가
+    is_active = True  # 기본적으로 활성화된 상태로 설정
+
+    def get_id(self):
+        return str(self.id)
+
+class UserInfo(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    income = db.Column(db.Float)
+    family_members = db.Column(db.Integer)
+    
 class Benefit(UserMixin, ModelMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
@@ -35,3 +56,12 @@ class Announcement(UserMixin, ModelMixin, db.Model):
     title = db.Column(db.String(100), nullable=False)
     content = db.Column(db.Text, nullable=False)
     posted_date = db.Column(db.DateTime, default=datetime.utcnow)
+    
+"""
+class UserInfo(db.Model): #소득정보, 가족정보 등 마이페이지 정보 저장
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    income = db.Column(db.Float)
+    family_members = db.Column(db.Integer)
+    user = db.relationship('User', backref=db.backref('user_info', uselist=False))
+"""

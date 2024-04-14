@@ -15,6 +15,7 @@
                 {% if current_user.is_authenticated %}
                 <li><a href="{{ url_for('benefits.list_benefits') }}">Benefits</a></li>
                 <li><a href="{{ url_for('applications.my_applications') }}">My Applications</a></li>
+                <li><a href="{{ url_for('applications.user_info') }}">My Info</a></li>
                 <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
                 {% else %}
                 <li><a href="{{ url_for('auth.login') }}">Login</a></li>
