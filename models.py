@@ -1,6 +1,12 @@
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from flask_login import UserMixin
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///welfare.db'
+
+db = SQLAlchemy(app)
 
 db = SQLAlchemy()
 
@@ -56,12 +62,3 @@ class Announcement(UserMixin, ModelMixin, db.Model):
     title = db.Column(db.String(100), nullable=False)
     content = db.Column(db.Text, nullable=False)
     posted_date = db.Column(db.DateTime, default=datetime.utcnow)
-    
-"""
-class UserInfo(db.Model): #소득정보, 가족정보 등 마이페이지 정보 저장
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    income = db.Column(db.Float)
-    family_members = db.Column(db.Integer)
-    user = db.relationship('User', backref=db.backref('user_info', uselist=False))
-"""
