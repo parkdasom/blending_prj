@@ -48,6 +48,8 @@ class Benefit(UserMixin, ModelMixin, db.Model):
     name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=False)
     requirements = db.Column(db.Text, nullable=False)
+    income = db.Column(db.Float)
+    family_members = db.Column(db.Integer)
     applications = db.relationship('Application', backref='benefit', lazy='dynamic')
 
 class Application(UserMixin, ModelMixin, db.Model):
@@ -55,7 +57,7 @@ class Application(UserMixin, ModelMixin, db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     benefit_id = db.Column(db.Integer, db.ForeignKey('benefit.id'), nullable=False)
     applied_date = db.Column(db.DateTime, default=datetime.utcnow)
-    status = db.Column(db.String(20), nullable=False, default='pending')
+    status = db.Column(db.String(20), nullable=False, default='승인 대기')
 
 class Announcement(UserMixin, ModelMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)

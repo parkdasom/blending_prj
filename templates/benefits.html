@@ -1,15 +1,24 @@
 {% extends 'base.html' %}
-
 {% block content %}
-<h1>Welfare Benefits</h1>
+<h1>복지혜택</h1>
+
+<!-- 검색 폼 -->
+<form method="GET" action="{{ url_for('benefits.list_benefits') }}">
+  <label for="income">소득:</label>
+  <input type="number" id="income" name="income" min="0" step="0.01">
+  <label for="family_members">가족 구성원 수:</label>
+  <input type="number" id="family_members" name="family_members" min="1">
+  <button type="submit">검색</button>
+</form>
+
 <ul>
-    {% for benefit in benefits %}
-    <li>
-        <h2>{{ benefit.name }}</h2>
-        <p>{{ benefit.description }}</p>
-        <p>Requirements: {{ benefit.requirements }}</p>
-        <a href="{{ url_for('applications.apply', benefit_id=benefit.id) }}">Apply</a>
-    </li>
-    {% endfor %}
+  {% for benefit in benefits %}
+  <li>
+    <h2>{{ benefit.name }}</h2>
+    <p>{{ benefit.description }}</p>
+    <p>Requirements: {{ benefit.requirements }}</p>
+    <a href="{{ url_for('applications.apply', benefit_id=benefit.id) }}">신청하기</a>
+  </li>
+  {% endfor %}
 </ul>
 {% endblock %}

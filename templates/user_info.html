@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>마이페이지</h1>
+<h1>정보 등록</h1>
 <form method="POST" action="{{ url_for('applications.user_info') }}">
     {{ form.csrf_token }}
     <p> 소득 정보 : {{ form.income }} </p>

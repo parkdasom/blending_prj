@@ -13,9 +13,9 @@
             <ul>
                 <li><a href="{{ url_for('index') }}">Home</a></li>
                 {% if current_user.is_authenticated %}
-                <li><a href="{{ url_for('benefits.list_benefits') }}">Benefits</a></li>
-                <li><a href="{{ url_for('applications.my_applications') }}">My Applications</a></li>
-                <li><a href="{{ url_for('applications.user_info') }}">My Info</a></li>
+                <li><a href="{{ url_for('benefits.list_benefits') }}">복지혜택</a></li>
+                <li><a href="{{ url_for('applications.user_info') }}">정보 등록</a></li>
+                <li><a href="{{ url_for('applications.my_applications') }}">마이 페이지</a></li>
                 <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
                 {% else %}
                 <li><a href="{{ url_for('auth.login') }}">Login</a></li>
