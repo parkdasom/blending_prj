@@ -2,6 +2,23 @@
 {% block content %}
 <h1>복지혜택</h1>
 
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+{% if notifications %}
+<h2>새로운 알림</h2>
+<ul>
+  {% for notification in notifications %}
+  <li>{{ notification.content }}</li>
+  {% endfor %}
+</ul>
+{% endif %}
+
 <!-- 검색 폼 -->
 <form method="GET" action="{{ url_for('benefits.list_benefits') }}">
   <label for="income">소득:</label>

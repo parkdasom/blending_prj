@@ -1,7 +1,8 @@
-from flask import Flask
+from flask import Flask, current_app
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from flask_login import UserMixin
+from datetime import datetime
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///welfare.db'
@@ -14,14 +15,6 @@ class ModelMixin(object):
     def save(self):
         db.session.add(self)
         db.session.commit()
-"""
-class User(UserMixin, ModelMixin, db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(64), nullable=False, unique=True)
-    email = db.Column(db.String(120), nullable=False, unique=True)
-    password = db.Column(db.String(100), nullable=False)
-    applications = db.relationship('Application', backref='user', lazy='dynamic')
-"""
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -30,7 +23,9 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(100))
     applications = db.relationship('Application', backref='user', lazy='dynamic')
     user_info = db.relationship('UserInfo', uselist=False, backref='user')
-
+    last_notification_checked_at = db.Column(db.DateTime, default=datetime.utcnow)
+    notifications = db.relationship('Notification', backref='user', lazy='dynamic')
+    
     # Flask-Login 요구 속성 추가
     is_active = True  # 기본적으로 활성화된 상태로 설정
 
@@ -51,6 +46,7 @@ class Benefit(UserMixin, ModelMixin, db.Model):
     income = db.Column(db.Float)
     family_members = db.Column(db.Integer)
     applications = db.relationship('Application', backref='benefit', lazy='dynamic')
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
 class Application(UserMixin, ModelMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -64,3 +60,26 @@ class Announcement(UserMixin, ModelMixin, db.Model):
     title = db.Column(db.String(100), nullable=False)
     content = db.Column(db.Text, nullable=False)
     posted_date = db.Column(db.DateTime, default=datetime.utcnow)
+
+class Notification(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    
+def create_notification(benefit_id):
+    with current_app.app_context():
+        benefit = Benefit.query.get(benefit_id)
+        if not benefit:
+            return
+
+        content = f"복지 혜택 '{benefit.name}'이(가) 업데이트되었습니다."
+        users = User.query.filter(
+            (User.income >= benefit.income) & (User.family_members >= benefit.family_members)
+        ).all()
+
+        for user in users:
+            notification = Notification(content=content, user=user)
+            db.session.add(notification)
+
+        db.session.commit()
