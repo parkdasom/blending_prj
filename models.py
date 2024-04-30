@@ -66,8 +66,11 @@ class Notification(db.Model):
     content = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    
-def create_notification(benefit_id):
+
+    def __repr__(self):
+        return f'<Notification {self.content[:20]}...>'
+
+def create_notification(user, benefit_id):
     with current_app.app_context():
         benefit = Benefit.query.get(benefit_id)
         if not benefit:
@@ -82,4 +85,5 @@ def create_notification(benefit_id):
             notification = Notification(content=content, user=user)
             db.session.add(notification)
 
+        user.last_notification_checked_at = datetime.utcnow()  # 마지막 알림 확인 시간을 업데이트
         db.session.commit()

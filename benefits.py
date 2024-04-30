@@ -1,3 +1,5 @@
+# benefits.py
+
 from flask import Blueprint, render_template, request, jsonify, flash, redirect, url_for
 from flask_login import login_required, current_user
 from models import Benefit, Notification, create_notification, db
@@ -8,19 +10,23 @@ benefits_bp = Blueprint('benefits', __name__, template_folder='templates')
 @benefits_bp.route('/benefits', methods=['GET'])
 @login_required
 def list_benefits():
-    income = request.args.get('income', type=float) or None
-    family_members = request.args.get('family_members', type=int) or None
+    income = request.args.get('income', type=float)
+    family_members = request.args.get('family_members', type=int)
 
-    query = Benefit.query
+    if income and family_members:
+        benefits = Benefit.query.filter(
+            Benefit.income >= income,
+            Benefit.family_members >= family_members
+        ).order_by(Benefit.id.desc()).all()
+    else:
+        benefits = Benefit.query.all()
 
-    if income is not None:
-        query = query.filter(Benefit.income >= income)
-    if family_members is not None:
-        query = query.filter(Benefit.family_members <= family_members)
+    notifications = Notification.query.filter(
+        Notification.user_id == current_user.id,
+        Notification.created_at > current_user.last_notification_checked_at
+    ).all()
 
-    benefits = query.order_by(Benefit.id.desc()).all()
-
-    return render_template('benefits.html', benefits=benefits)
+    return render_template('benefits.html', benefits=benefits, notifications=notifications)
 
 @benefits_bp.route('/notifications', methods=['GET'])
 @login_required

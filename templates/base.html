@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Welfare Benefits Platform{% endblock %}</title>
+    <title>{% block title %}복지 플랫폼{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     
     {% block head %}{% endblock %}
@@ -28,14 +28,14 @@
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
-                <div class="{{ category }}">{{ message }}</div>
+                <!--<div class="{{ category }}">{{ message }}</div> 240430 안내메세지-->
                 {% endfor %}
             {% endif %}
         {% endwith %}
         {% block content %}{% endblock %}
     </main>
     <footer>
-        &copy; Welfare Benefits Platform
+        &copy; 복지 플랫폼
     </footer>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
     {% block scripts %}{% endblock %}

@@ -13,17 +13,9 @@ def apply(benefit_id):
     application = Application(user_id=current_user.id, benefit_id=benefit_id)
     db.session.add(application)
     db.session.commit()
-    flash('Application submitted successfully!', 'success')
+    flash('복지혜택 신청이 완료 되었습니다.', 'success')
     return redirect(url_for('benefits.list_benefits'))
 
-"""
-@applications_bp.route('/my-applications')
-@login_required
-def my_applications():
-    applications = current_user.applications.all()
-    return render_template('applications.html', applications=applications)
-"""
-
 @applications_bp.route('/my-applications')
 @login_required
 def my_applications():
@@ -31,24 +23,6 @@ def my_applications():
         joinedload(Application.user).joinedload(User.user_info)
     ).all()
     return render_template('applications.html', applications=applications)
-
-"""
-#사용자 정보 입력 라우트 추가
-@applications_bp.route('/my-applications')
-@login_required
-def my_applications():
-    applications = current_user.applications.options(
-        joinedload(Application.user).joinedload(User.user_info)
-    ).all()
-    for app in applications:
-        user_info = app.user.user_info
-        if user_info:
-            email = app.user.email
-            income = user_info.income
-            family_members = user_info.family_members
-            # 여기에서 email, income, family_members 값을 사용할 수 있습니다.
-    return render_template('applications.html', applications=applications)
-"""
 
 @applications_bp.route('/user-info', methods=['GET', 'POST'])
 @login_required
