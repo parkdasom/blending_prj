@@ -17,3 +17,13 @@ socket.on('status_changed', function(data) {
 socket.on('disconnect', function() {
     console.log('Disconnected from server');
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+    const closeButton = document.getElementById('closeButton');
+    if (closeButton) {
+        closeButton.addEventListener('click', function () {
+            const notification = document.getElementById('notification');
+            notification.style.display = 'none'; // 알림 숨기기
+        });
+    }
+});

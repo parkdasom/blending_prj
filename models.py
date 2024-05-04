@@ -70,7 +70,7 @@ class Notification(db.Model):
     def __repr__(self):
         return f'<Notification {self.content[:20]}...>'
 
-def create_notification(user, benefit_id):
+def create_notification(benefit_id):
     with current_app.app_context():
         benefit = Benefit.query.get(benefit_id)
         if not benefit:
@@ -78,12 +78,13 @@ def create_notification(user, benefit_id):
 
         content = f"복지 혜택 '{benefit.name}'이(가) 업데이트되었습니다."
         users = User.query.filter(
-            (User.income >= benefit.income) & (User.family_members >= benefit.family_members)
+            (User.income >= benefit.income) &
+            (User.family_members >= benefit.family_members)
         ).all()
 
         for user in users:
             notification = Notification(content=content, user=user)
             db.session.add(notification)
+            user.last_notification_checked_at = datetime.utcnow()  # 마지막 알림 확인 시간을 업데이트
 
-        user.last_notification_checked_at = datetime.utcnow()  # 마지막 알림 확인 시간을 업데이트
         db.session.commit()
